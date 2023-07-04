@@ -10,7 +10,7 @@ The purpose of this test is to assess your technical skills in handling tasks th
 
 ### How to setup
 
-Clone this repo and run:
+Fork this repo, clone it and run:
 
     $ npm install
 
