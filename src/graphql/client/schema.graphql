@@ -1,0 +1,990 @@
+type Query {
+  """
+  Returns the Business Asset available in integration for business Account
+  """
+  getBrandAssets(brandId: String!): BrandAssetsResponse!
+
+  """
+  Returns the Business Account platforms State
+  """
+  getPlatformConnections: [PlatformState!]!
+
+  """
+  Returns the Business Asset available in integration for business Account
+  """
+  getBusinessAccountAssets: IntegrationsAssets!
+
+  """
+  Get brand creative Analytics metrics summary
+  """
+  getCreativeAnalyticsSummary(filter: CreativeAnalyticFilter!): MetricsSummary
+
+  """
+  Get brand creative Analytics insights
+  """
+  getInsights(filter: CreativeAnalyticFilter!): [Insight!]
+
+  """
+  Get brand tag Usage Report
+  """
+  getTagsByUsage(filter: CreativeAnalyticFilter!): [TreeNode!]
+
+  """
+  Get brand creative Analytics highlights
+  """
+  getHighlights(filter: CreativeAnalyticFilter!): [Highlight!]
+
+  """
+  Get Tag Ranking
+  """
+  getTagRanking(
+    tagFilter: [TagFilterInput!]
+    orderingColumn: TagRankingOrderingInput
+    filter: CreativeAnalyticFilter!
+  ): [TagOverallMetrics!]
+
+  """
+  Get Ad Profile with campaign and channel differences
+  """
+  getAdProfile(filter: CreativeAnalyticFilter!, adId: String!): AdProfile
+
+  """
+  Get tag Summary by campaign and channel
+  """
+  getTagSummary(filter: CreativeAnalyticFilter!): [TagSummary!]
+
+  """
+  Get tag Usage Ranking
+  """
+  getTagUsageRanking(filter: CreativeAnalyticFilter!): [TagMetric!]
+
+  """
+  Get Creative Performance over Time
+  """
+  getCreativePerformanceOverTime(
+    metric: String!
+    adId: String!
+    filter: CreativeAnalyticFilter!
+  ): [DataPerformanceEntry!]
+
+  """
+  Get tag performance over time
+  """
+  getTagPerformanceOverTime(
+    scale: Scale
+    metric: String!
+    filter: CreativeAnalyticFilter!
+  ): [PerformanceDataEntry!]
+
+  """
+  Get tag performance over time for all channels
+  """
+  getTagPerformanceOverTimeAllChannel(
+    scale: Scale
+    metric: String!
+    filter: CreativeAnalyticFilter!
+  ): [PerformanceDataEntry!]
+
+  """
+  Get all brand Tags in tree form
+  """
+  getBrandTags(brandId: String!): [TreeNode!]
+
+  """
+  Get Creative Profile
+  """
+  getCreativeProfile(filter: CreativeProfileInput!): CreativeProfile
+
+  """
+  Get Performance Metrics
+  """
+  getPerformanceMetrics(
+    filter: PerformanceMetricFiltersInput!
+    brandId: String!
+  ): [ChannelPerformanceMetrics!]
+
+  """
+  List Folders and creatives from specific folder
+  """
+  listFolder(input: CreativeLibraryFilter!): CreativeLibraryFolder!
+
+  """
+  Validate Invitation Code
+  """
+  validateInvitationCode(invitationCode: String!): String!
+
+  """
+  Get logged in user or NULL if it is not logged in
+  """
+  getLoggedInUser: User
+}
+
+type BrandAssetsResponse {
+  adAccounts: [AdAccount!]
+  socialAccounts: [SocialAccount!]
+}
+
+type AdAccount {
+  id: ID!
+  originalId: String!
+  platform: Platform!
+  type: AdAccountType!
+  name: String
+}
+
+enum Platform {
+  META
+  TIKTOK
+}
+
+"""
+AdAccountType
+"""
+enum AdAccountType {
+  MetaAdAccount
+  TiktokAdAccount
+}
+
+type SocialAccount {
+  id: ID!
+  originalId: String!
+  platform: Platform!
+  type: SocialAccountType!
+  name: String
+}
+
+"""
+SocialAccountType
+"""
+enum SocialAccountType {
+  FacebookPage
+  InstagramAccount
+  TiktokAccount
+}
+
+type PlatformState {
+  platform: Platform!
+  status: ConnectionState!
+  userEmail: String
+  expirationDate: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  totalAds: Int
+  totalCreatives: Int
+  extractedAds: Int
+  extractedCreatives: Int
+}
+
+enum ConnectionState {
+  OK
+  ERROR
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+type IntegrationsAssets {
+  adAccounts: [AdAccount!]
+  socialAccounts: [SocialAccount!]
+}
+
+type MetricsSummary {
+  creativesTotal: Int!
+  adsTotal: Int!
+  spendTotal: Int!
+  metrics: Metrics
+}
+
+type Metrics {
+  spend: MetricValue
+  usage: MetricValue
+  impressions: MetricValue
+  adRecallRate: MetricValue
+  reach: MetricValue
+  bai: MetricValue
+  engagement: MetricValue
+  engagementRate: MetricValue
+  costPerEngagement: MetricValue
+  videoViews: MetricValue
+  videoThroughRate: MetricValue
+  costPerCompletedView: MetricValue
+  clicks: MetricValue
+  clickThroughRate: MetricValue
+  costPerClick: MetricValue
+  frequency: MetricValue
+  costPerMille: MetricValue
+  conversion: MetricValue
+  conversionRate: MetricValue
+  costPerAcquisition: MetricValue
+  leads: MetricValue
+  leadRate: MetricValue
+  costPerLead: MetricValue
+  appInstall: MetricValue
+  appInstallRate: MetricValue
+  costPerAppInstall: MetricValue
+  fiveSecondsIndex: MetricValue
+  textSaliencyScore: MetricValue
+  logoSaliencyScore: MetricValue
+}
+
+type MetricValue {
+  value: Float!
+}
+
+input CreativeAnalyticFilter {
+  brandId: ID!
+  range: TimeRange
+  campaignObjective: CampaignObjective
+  superClass: SuperClass
+  tags: [TagInput!]
+  channels: [Channel!]
+}
+
+input TimeRange {
+  init: DateTime
+  end: DateTime
+}
+
+"""
+Campaign objectives
+"""
+enum CampaignObjective {
+  AWARENESS
+  ENGAGEMENT
+  VIDEO_VIEWS
+  TRAFFIC
+  LEAD_GENERATION
+  CONVERSIONS
+  PRODUCT_SALES
+  APP_PROMOTION
+  CROSS_OBJECTIVE
+}
+
+"""
+All SuperClass enum Values
+"""
+enum SuperClass {
+  VISUAL_VALUES
+  SCENE
+  PEOPLE
+  OVERLAY_TEXT
+  METADATA
+  BRAND_ELEMENTS
+  ELEMENTS
+  AUDIO
+  AD_COPY
+  SPEECH
+}
+
+input TagInput {
+  tagSuperClass: String
+  tagClass: String!
+  tagValue: String!
+  channel: Channel
+}
+
+"""
+Channels
+"""
+enum Channel {
+  facebook
+  instagram
+  tiktok
+  crossChannel
+}
+
+type Insight {
+  tag: Tag!
+  spend: Float!
+  usage: Int!
+  campaignObjective: CampaignObjective!
+  result: MetricVariance
+  costResult: MetricVariance
+  expectedImpact: Int
+  channel: Channel
+}
+
+type Tag {
+  tagSuperClass: String
+  tagClass: String!
+  tagValue: String!
+  importance: Float
+}
+
+type MetricVariance {
+  metric: Metric!
+  variance: Float
+  value: Float
+  average: Float
+}
+
+"""
+All metric enum values
+"""
+enum Metric {
+  impressions
+  adRecallRate
+  reach
+  frequency
+  costPerMille
+  engagement
+  engagementRate
+  costPerEngagement
+  videoViews
+  videoThroughRate
+  costPerCompletedView
+  clicks
+  clickThroughRate
+  costPerClick
+  conversion
+  conversionRate
+  costPerAcquisition
+  costPerAppInstall
+  costPerLead
+  leadRate
+  appInstallRate
+  usage
+  spend
+  bai
+  fiveSecondsIndex
+  textSaliencyScore
+  logoSaliencyScore
+  leads
+  appInstall
+}
+
+type TreeNode {
+  key: String!
+  nestedTotal: Int
+  children: [TreeNode!]!
+}
+
+type Highlight {
+  advertisementId: String!
+  fileType: FileType!
+  url: String!
+  campaignObjective: CampaignObjective!
+  result: MetricVariance!
+  costResult: MetricVariance!
+  channel: [Channel!]!
+}
+
+enum FileType {
+  IMAGE
+  VIDEO
+}
+
+type TagOverallMetrics {
+  tag: Tag!
+  channels: [Channel!]!
+  tip: Tip
+  creativesTotal: TotalValue!
+  adsTotal: TotalValue!
+  spendTotal: TotalValue!
+  impressionsTotal: TotalValue!
+  engagementRate: MetricVariance!
+  costPerEngagement: MetricVariance!
+  videoThroughRate: MetricVariance!
+  clickThroughRate: MetricVariance!
+  leadRate: MetricVariance!
+  conversionRate: MetricVariance!
+  appInstallRate: MetricVariance!
+  costPerMille: MetricVariance!
+  costPerClick: MetricVariance!
+  costPerLead: MetricVariance!
+  costPerAcquisition: MetricVariance!
+  costPerAppInstall: MetricVariance!
+  costPerCompletedView: MetricVariance!
+  frequency: MetricVariance!
+}
+
+type Tip {
+  value: TipValue!
+  detail: TipDetail!
+  placeHolders: [TipPlaceHolder!]
+}
+
+"""
+Tip Value
+"""
+enum TipValue {
+  noTip
+}
+
+"""
+Tip Detail
+"""
+enum TipDetail {
+  noTip
+}
+
+type TipPlaceHolder {
+  value: String!
+  key: String!
+  type: PlaceHolderType!
+}
+
+"""
+Place Holder Type
+"""
+enum PlaceHolderType {
+  STRING
+  NUMBER
+  PERCENTAGE
+  CURRENCY
+  METRIC
+  METRIC_LIST
+}
+
+type TotalValue {
+  value: Float
+  total: Float
+}
+
+input TagFilterInput {
+  tagSuperClass: String
+  tagClass: String
+  tagValue: String
+}
+
+input TagRankingOrderingInput {
+  orderingColumn: TagRankingOrderingColumn!
+  orderingDirection: OrderingDirection = DESC
+  pageNumber: Int = 1
+  pageSize: Int = 10
+}
+
+"""
+Tag Ranking Column
+"""
+enum TagRankingOrderingColumn {
+  tagImpressions
+  tagSpend
+  frequencyValue
+  engagementRateValue
+  videoThroughRateValue
+  clickThroughRateValue
+  leadRateValue
+  conversionRateValue
+  appInstallRateValue
+  costPerMileValue
+  costPerEngagementValue
+  costPerCompletedVideoValue
+  costPerClickValue
+  costPerLeadValue
+  costPerAcquisitionValue
+  costPerAppInstallValue
+}
+
+"""
+Ordering direction
+"""
+enum OrderingDirection {
+  ASC
+  DESC
+}
+
+type AdProfile {
+  advertisementId: String
+  name: String
+  fileType: FileType
+  url: String
+  campaignObjective: CampaignObjective
+  channel: [Channel!]
+  heatMapUrl: String
+  metrics: Metrics
+  tags: [Tag!]
+}
+
+type TagSummary {
+  campaignObjective: CampaignObjective
+  channel: Channel
+  creativesTotal: Float
+  adsTotal: Float
+  spendTotal: Float
+  frequency: MetricRange
+  costPerMile: MetricRange
+  engagementRate: MetricRange
+  costPerEngagement: MetricRange
+  videoThroughRate: MetricRange
+  costPerCompletedVideo: MetricRange
+  clickThroughRate: MetricRange
+  costPerClick: MetricRange
+  leadRate: MetricRange
+  costPerLead: MetricRange
+  conversionRate: MetricRange
+  costPerAcquisition: MetricRange
+  appInstallRate: MetricRange
+  costPerAppInstall: MetricRange
+}
+
+type MetricRange {
+  max: Float!
+  min: Float!
+}
+
+type TagMetric {
+  tag: Tag!
+  channel: Channel
+  metrics: Metrics!
+}
+
+type DataPerformanceEntry {
+  date: String!
+  data: SerialData!
+}
+
+type SerialData {
+  main_0: Float
+  metric_0: Float
+  main_1: Float
+  metric_1: Float
+  main_2: Float
+  metric_2: Float
+  main_3: Float
+  metric_3: Float
+  main_4: Float
+}
+
+type PerformanceDataEntry {
+  date: String!
+  data: [SerialEntry!]!
+}
+
+type SerialEntry {
+  key: String!
+  main: Float
+  metric: Float
+}
+
+"""
+Scale
+"""
+enum Scale {
+  days
+  weeks
+}
+
+type CreativeProfile {
+  creativeId: String
+  name: String
+  fileType: FileType
+  url: String
+  clipEmbeddingUrl: String
+  heatMapUrl: String
+  metrics: CreativeMetrics
+  tags: [Tag!]
+}
+
+type CreativeMetrics {
+  adRecallRate: CreativeMetricValue
+  bai: CreativeMetricValue
+  fiveSecondsIndex: CreativeMetricValue
+  textSaliencyScore: CreativeMetricValue
+  logoSaliencyScore: CreativeMetricValue
+}
+
+type CreativeMetricValue {
+  value: Float
+  labeledValue: LabeledMetricValue
+}
+
+"""
+Labeled Metric Value
+"""
+enum LabeledMetricValue {
+  unknown
+  low
+  mid
+  high
+}
+
+input CreativeProfileInput {
+  brandId: ID!
+  creativeId: ID!
+}
+
+type ChannelPerformanceMetrics {
+  channel: Channel!
+  metrics: PerformanceMetrics
+}
+
+type PerformanceMetrics {
+  engagementRate: CreativeMetricValue
+  videoThroughRate: CreativeMetricValue
+  clickThroughRate: CreativeMetricValue
+}
+
+input PerformanceMetricFiltersInput {
+  targetingAgeMax: Int!
+  targetingAgeMin: Int!
+  campaignObjective: CampaignObjective!
+  targetingGenders: Int!
+  spendUsd: Int!
+  clipEmbeddingUrl: String!
+}
+
+type CreativeLibraryFolder {
+  id: Float!
+  parentId: Float
+  path: String!
+  folders: [CreativeLibraryFolder!]
+  creatives: [CreativeLibraryItem!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CreativeLibraryItem {
+  creativeId: String!
+  name: String!
+  fileType: String!
+  url: String!
+  clipEmbeddingUrl: String
+  status: CreativeStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+Creative Status
+"""
+enum CreativeStatus {
+  ConversionPending
+  MemorabilityPending
+  TaggingPending
+  SaliencyPending
+  Ready
+}
+
+input CreativeLibraryFilter {
+  brandId: String!
+  folderId: Int
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  email: String!
+  name: String
+  isAdmin: Boolean!
+  businessAccount: BusinessAccount
+  termsAndConditionsAccepted: DateTime
+  emailVerified: Boolean!
+  isContractValid: Boolean!
+}
+
+type BusinessAccount {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  businessName: String!
+  users: [User!]!
+  brands: [Brand!]
+  businessLogoUrl: String
+  businessPhone: String
+  website: String
+  address: String
+}
+
+type Brand {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  logoUrl: String
+  sector: [Sector!]
+  adAccounts: [String!]
+  socialAccounts: [String!]
+  status: BrandStatus
+  businessAccount: BusinessAccount!
+}
+
+enum Sector {
+  ApparelAndAccessories
+  BeautyAndPersonalCare
+  FoodAndBeverage
+  HomeAndGarden
+  SportsAndFitness
+  HomeAppliances
+  HomeImprovement
+  HouseholdSupplies
+  PetCare
+  TobaccoAndSmokingAccessories
+  ToysAndGames
+  OilAndGas
+  RenewableEnergy
+  Utilities
+  BankingAndLending
+  Insurance
+  InvestmentAndWealthManagement
+  PharmaceuticalsAndBiotechnology
+  MedicalDevices
+  HealthcareServices
+  ConstructionAndEngineering
+  AerospaceAndDefense
+  TransportationEquipment
+  SoftwareAndITServices
+  HardwareAndElectronics
+  InternetServices
+  TelecommunicationsEquipment
+  TelecommunicationsServices
+  NetworkingEquipment
+  AirlinesAndAirTransportation
+  HotelsAndResorts
+  RestaurantsAndFoodServices
+  TravelAgenciesAndTourOperators
+  AmusementParksAndAttractions
+  TelevisionBroadcastingAndProduction
+  FilmProductionAndDistribution
+  MusicRecordingAndProduction
+  Publishing
+  Gaming
+  ResidentialRealEstate
+  CommercialRealEstate
+  RealEstateInvestmentTrusts
+  RealEstateDevelopmentAndConstruction
+  PublicAndPrivateSchools
+  CollegesAndUniversities
+  OnlineEducationPlatforms
+  VocationalAndTechnicalSchools
+  CorporateTrainingAndDevelopment
+}
+
+"""
+Brand Status
+"""
+enum BrandStatus {
+  IN_PROGRESS
+  DATA_READY
+  MODEL_TRAINING
+  READY
+}
+
+type Mutation {
+  """
+  Creates a business Account for the provided business admin
+  """
+  createBrand(input: CreateBrandInput!): Brand!
+
+  """
+  Updates optional fields of a brand
+  """
+  updateBrand(input: UpdateBrandInput!, brandId: String!): Brand!
+
+  """
+  Updates assets of a brand
+  """
+  updateBrandAssets(input: BrandAssetsInput!, brandId: String!): AssetChecks!
+
+  """
+  Uploads brand logo
+  """
+  requestLogoUploadData(input: UploadRequestInput!): UploadDataResponse!
+
+  """
+  Creates a business Account for the provided business admin
+  """
+  createBusinessAccount(input: CreateBusinessAccountInput!): BusinessAccount!
+
+  """
+  Updates optional fields of a business Account
+  """
+  updateBusinessAccount(input: UpdateBusinessAccountInput!): BusinessAccount!
+
+  """
+  Cancel Business Account
+  """
+  cancelBusinessAccount: BusinessAccount!
+
+  """
+  Receives a Oauth Code for completing linking with Integrations
+  """
+  createPlatformIntegration(
+    redirectUri: String
+    authCode: String!
+    platform: Platform!
+  ): IntegrationsAssets!
+
+  """
+  Receives a Oauth Code for completing linking with Integrations
+  """
+  deletePlatformIntegration(platform: Platform!): Boolean!
+
+  """
+  Request uploadData to upload the file to the storage
+  """
+  requestUploadData(input: UploadRequestInput!): UploadDataResponse!
+
+  """
+  Save in the right folder the creative with the given id. The creative must be uploaded before calling this mutation
+  """
+  saveCreative(input: CreativeInput!): CreativeLibraryItem!
+
+  """
+  Create a Folder in a given folder. If the folder is not specified, the folder will be created in the root folder
+  """
+  createFolder(input: FolderInput!): CreativeLibraryFolder!
+
+  """
+  Generate referral invitations
+  """
+  createReferralInvitations(numberOfInvitations: Float!): [Invitation!]!
+
+  """
+  Delete Invitation Code
+  """
+  deleteInvitation(invitationCode: String!): Boolean!
+
+  """
+  Log in user
+  """
+  logIn(input: AuthenticationInput!): LoggedInUser!
+
+  """
+  Refresh log in token
+  """
+  refreshLogInToken: String!
+
+  """
+  Update user profile. If setting new password and current password is invalid, BAD_REQUEST is thrown
+  """
+  updateUserProfile(input: UserProfileInput!): User!
+
+  """
+  Accept terms and conditions for current user
+  """
+  acceptTermsAndConditions: Boolean!
+
+  """
+  Create the new User using a Invitation Code
+  """
+  signUp(code: String!, user: SignUpInput!): User!
+
+  """
+  Logout user
+  """
+  logout: Boolean!
+}
+
+input CreateBrandInput {
+  name: String!
+  logoUrl: String
+  sector: [Sector!]!
+}
+
+input UpdateBrandInput {
+  name: String
+  logoUrl: String
+  sector: [Sector!]
+}
+
+type AssetChecks {
+  unrelatedSocialAccountId: [String!]
+}
+
+input BrandAssetsInput {
+  adAccount: [AdAccountInput!]
+  socialAccount: [SocialAccountInput!]
+}
+
+input AdAccountInput {
+  id: Int
+  type: AdAccountType!
+}
+
+input SocialAccountInput {
+  id: String
+  type: SocialAccountType!
+}
+
+type UploadDataResponse {
+  id: String!
+  originalUrl: String!
+  presignedData: PresignedData!
+}
+
+type PresignedData {
+  url: String!
+  fields: String!
+}
+
+input UploadRequestInput {
+  mimeType: String!
+  extension: String!
+}
+
+input CreateBusinessAccountInput {
+  businessName: String!
+}
+
+input UpdateBusinessAccountInput {
+  businessName: String
+  address: String
+  businessPhone: String
+  website: String
+  businessLogoUrl: String
+}
+
+input CreativeInput {
+  creativeId: String!
+  name: String!
+  folderId: Float!
+  brandId: String!
+}
+
+input FolderInput {
+  name: String!
+  brandId: String!
+  parentId: Float!
+}
+
+type Invitation {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  code: String!
+  email: String
+  type: InvitationType!
+  isAdmin: Boolean!
+  expirationDate: DateTime
+}
+
+"""
+All invitation type enum values
+"""
+enum InvitationType {
+  referral
+  internal
+}
+
+type LoggedInUser {
+  sessionToken: String!
+}
+
+input AuthenticationInput {
+  email: String!
+  password: String!
+}
+
+input UserProfileInput {
+  name: String
+
+  """
+  Required if 'New Password' is sent. Must match current user password.
+  """
+  currentPassword: String
+
+  """
+  Requires 'Current Password' to also be sent
+  """
+  newPassword: String
+}
+
+input SignUpInput {
+  name: String!
+  email: String!
+  password: String!
+}

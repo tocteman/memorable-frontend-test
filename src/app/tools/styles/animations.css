@@ -1,0 +1,177 @@
+.animFadeIn {
+    animation: .3s cubic-bezier(0.4, 0, 0.2, 1) animFadeIn both
+}
+
+.animSlideTopIn {
+    animation: .3s cubic-bezier(0.4, 0, 0.2, 1) slideTopIn both
+}
+
+.animSlideLeftIn {
+    animation: .3s cubic-bezier(0.4, 0, 0.2, 1) slideIn both
+}
+
+.animSlideRightIn {
+    animation: .3s cubic-bezier(0.4, 0, 0.2, 1) slideRightIn both
+}
+
+.animFadeInDelayed {
+    animation: .6s .1s cubic-bezier(0.4, 0, 0.2, 1) animFadeIn both
+}
+
+.animHeightIn {
+    overflow: hidden;
+    animation: .6s cubic-bezier(0.87, -0.01, 0.37, 0.98) heightIn both, .2s cubic-bezier(0.4, 0, 0.2, 1) animFadeIn both
+}
+
+.animDelay1 {
+    animation-delay: 100ms;
+}
+
+.animCreateIn {
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+    animation: dash 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animShake {
+    animation: shake-horizontal .6s cubic-bezier(.455, .03, .515, .955) both
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes heightIn {
+    0% {
+        max-height: 0%;
+    }
+
+    100% {
+        max-height: 100%;
+    }
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes animFadeIn {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes progress {
+    0% {
+        max-width: 0;
+    }
+
+    100% {
+        max-width: 100%;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideRightIn {
+    0% {
+        opacity: 0;
+        transform: translateX(50%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideTopIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideLeftIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake-horizontal {
+
+    0%,
+    100% {
+        transform: translateX(0)
+    }
+
+    10%,
+    30%,
+    50%,
+    70% {
+        transform: translateX(-4px)
+    }
+
+    20%,
+    40%,
+    60% {
+        transform: translateX(4px)
+    }
+
+    80% {
+        transform: translateX(2px)
+    }
+
+    90% {
+        transform: translateX(-2px)
+    }
+}

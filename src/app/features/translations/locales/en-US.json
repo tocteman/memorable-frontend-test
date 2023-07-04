@@ -1,0 +1,39 @@
+{
+  "metrics": {
+    "engagementRate": "ER",
+    "videoThroughRate": "VTR",
+    "clickThroughRate": "CTR",
+    "leadRate": "LR",
+    "adRecallRate": "Ad Recall Rate",
+    "conversionRate": "CR",
+
+    "costPerCompletedView": "CPCV",
+    "costPerEngagement": "CPE",
+    "costPerClick": "CPC",
+    "costPerAcquisition": "CPA",
+    "costPerMille": "CPM",
+    "costPerLead": "CPL",
+
+    "frequency": "Frequency",
+    "conversion": "Conversion",
+    "leadGeneration": "Lead Generation",
+    "leads": "Leads",
+    "engagement": "Engagement",
+    "videoViews": "Video views",
+    "clicks": "Clicks"
+  },
+  "channels": {
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "twitter": "Twitter",
+    "youtube": "Youtube",
+    "crossChannel": "Cross channel",
+    "tiktok": "TikTok",
+    "FacebookPage": "Facebook Page",
+    "InstagramAccount": "Instagram Account",
+    "TiktokAccount": "Tiktok Account"
+  },
+  "tipValue":{
+    "noTip": "No tip"
+  }
+}
