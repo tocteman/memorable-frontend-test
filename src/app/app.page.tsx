@@ -51,21 +51,6 @@ const App = () => {
     );
   }
 
-  useEffect(() => {
-    const APP_ID = env("VITE_INTERCOM_APP_ID");
-    if (user) {
-      window.heap.identify(user.email);
-      window.Intercom("boot", {
-        app_id: APP_ID,
-        name: user.name,
-        email: user.email,
-        created_at: new Date().getTime(),
-      });
-    } else {
-      window.Intercom("shutdown");
-    }
-  }, [user]);
-
   return (
     <>
       <Routes>
