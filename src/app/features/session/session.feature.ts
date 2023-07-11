@@ -1,8 +1,6 @@
 import { useRepositoryFeature } from "src/app/features/repositories/repositories.feature";
-import { env } from "src/app/legacy/env.tool";
 import { token } from "src/app/legacy/token.tool";
 import { useSessionState } from "./session.state";
-import * as Sentry from "@sentry/react";
 import { Route } from "src/app/features/navigation/models/route.model";
 import { AuthenticationInput, Brand, User } from "src/graphql/client";
 import { UsersRepository } from "src/domain/users/users.domain";
@@ -18,9 +16,6 @@ export const useSessionFeature = (repoId = "UsersRepository") => {
   };
 
   const logout = async () => {
-    if (env("VITE_APP_SENTRY_DSN")) {
-      Sentry.setUser(null);
-    }
     localStorage.clear();
     token.clear();
     state.removeUser();
